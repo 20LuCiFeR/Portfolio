@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aman Sharma — Embedded Linux &amp; Edge AI Engineer</title>
+<meta name="description" content="Aman Sharma — Embedded Firmware &amp; Linux Engineer specializing in Edge AI / Computer Vision on STM32MP2, i.MX93/95, BeagleBone and Raspberry Pi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a120e;
+    --bg-alt: #0d1712;
+    --panel: #101c15;
+    --panel-2: #0d1811;
+    --border: #223428;
+    --border-soft: #1a2820;
+    --copper: #c17a45;
+    --copper-dim: #8a5a34;
+    --amber: #e8a33d;
+    --phosphor: #7fe0a0;
+    --text: #edeae0;
+    --text-dim: #9db1a4;
+    --text-faint: #5f7568;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --maxw: 1040px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(193,122,69,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 400px at 100% 20%, rgba(127,224,160,0.05), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--copper); color:#0a120e; }
+  a{ color:inherit; }
+  img{max-width:100%;display:block;}
+
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(10,18,14,0.82);
+    border-bottom:1px solid var(--border-soft);
+  }
+  .nav-inner{
+    max-width:var(--maxw); margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-family:var(--mono); font-weight:600; font-size:14px;
+    color:var(--text); text-decoration:none; letter-spacing:0.02em;
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand .dot{ width:7px; height:7px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 8px var(--phosphor); flex-shrink:0; }
+  nav.links{ display:flex; gap:22px; }
+  nav.links a{
+    font-family:var(--mono); font-size:12px; text-decoration:none;
+    color:var(--text-dim); letter-spacing:0.03em;
+    transition:color .2s;
+  }
+  nav.links a:hover{ color:var(--amber); }
+  nav.links a span.tag{ color:var(--copper); margin-right:4px; }
+  .nav-toggle{ display:none; background:none; border:1px solid var(--border); color:var(--text); font-family:var(--mono); padding:6px 10px; border-radius:4px; font-size:12px; }
+
+  @media (max-width:760px){
+    nav.links{ display:none; }
+    .nav-toggle{ display:inline-block; }
+    nav.links.open{ display:flex; position:absolute; top:100%; left:0; right:0; background:var(--bg-alt); flex-direction:column; padding:16px 28px; gap:14px; border-bottom:1px solid var(--border-soft); }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding:88px 0 64px; position:relative; }
+  .terminal{
+    font-family:var(--mono); font-size:12.5px; color:var(--phosphor);
+    background:var(--panel-2); border:1px solid var(--border);
+    border-radius:8px; padding:16px 18px; max-width:560px;
+    min-height:132px;
+    box-shadow: inset 0 0 24px rgba(0,0,0,0.35);
+  }
+  .terminal .ln{ opacity:0.85; white-space:pre-wrap; word-break:break-word; }
+  .terminal .ln .ts{ color:var(--text-faint); }
+  .terminal .cursor{ display:inline-block; width:7px; height:13px; background:var(--phosphor); vertical-align:middle; animation:blink 1s step-end infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero-head{ margin-top:34px; }
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; color:var(--copper);
+    letter-spacing:0.12em; text-transform:uppercase; margin:0 0 14px;
+  }
+  h1.name{
+    font-family:var(--mono); font-weight:700; font-size:clamp(34px,6vw,58px);
+    margin:0 0 6px; letter-spacing:-0.01em; color:var(--text);
+  }
+  .role{
+    font-family:var(--sans); font-weight:500; font-size:clamp(16px,2.4vw,20px);
+    color:var(--text-dim); margin:0 0 22px; max-width:640px;
+  }
+  .role b{ color:var(--amber); font-weight:600; }
+
+  .hero-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
+  .btn{
+    font-family:var(--mono); font-size:13px; text-decoration:none;
+    padding:11px 18px; border-radius:6px; border:1px solid var(--border);
+    color:var(--text); transition:all .2s; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn.primary{ background:var(--copper); border-color:var(--copper); color:#100a06; font-weight:600; }
+  .btn.primary:hover{ background:var(--amber); border-color:var(--amber); }
+  .btn.ghost:hover{ border-color:var(--copper); color:var(--amber); }
+
+  .hero-meta{
+    display:flex; flex-wrap:wrap; gap:18px; margin-top:28px;
+    font-family:var(--mono); font-size:12.5px; color:var(--text-dim);
+  }
+  .hero-meta a{ text-decoration:none; color:inherit; border-bottom:1px dotted var(--border); }
+  .hero-meta a:hover{ color:var(--amber); border-color:var(--amber); }
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{ padding:64px 0; border-top:1px solid var(--border-soft); position:relative; }
+  .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:8px; }
+  .designator{
+    font-family:var(--mono); font-weight:700; font-size:13px; color:var(--copper);
+    border:1px solid var(--copper-dim); padding:3px 9px; border-radius:4px;
+    background:rgba(193,122,69,0.08); flex-shrink:0;
+  }
+  .sec-title{ font-family:var(--mono); font-weight:600; font-size:22px; margin:0; letter-spacing:-0.01em; }
+  .sec-sub{ color:var(--text-dim); max-width:680px; margin:14px 0 32px; font-size:15px; }
+
+  /* ---------- CHIPS ---------- */
+  .chips{ display:flex; flex-wrap:wrap; gap:9px; }
+  .chip{
+    font-family:var(--mono); font-size:12.5px; color:var(--text-dim);
+    border:1px solid var(--border); padding:7px 12px; border-radius:5px;
+    background:var(--panel-2);
+  }
+  .chip.hot{ color:var(--phosphor); border-color:rgba(127,224,160,0.35); }
+
+  .module-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  @media (max-width:700px){ .module-grid{ grid-template-columns:1fr; } }
+  .module-card{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:24px; }
+  .module-card h3{ font-family:var(--mono); font-size:14px; color:var(--amber); margin:0 0 14px; letter-spacing:0.02em; }
+
+  /* ---------- PROJECTS ---------- */
+  .filters{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
+  .filter-btn{
+    font-family:var(--mono); font-size:12px; color:var(--text-dim);
+    background:transparent; border:1px solid var(--border); padding:8px 14px;
+    border-radius:20px; cursor:pointer; transition:all .2s;
+  }
+  .filter-btn:hover{ border-color:var(--copper); color:var(--text); }
+  .filter-btn.active{ background:var(--copper); border-color:var(--copper); color:#100a06; font-weight:600; }
+
+  .proj-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media (max-width:700px){ .proj-grid{ grid-template-columns:1fr; } }
+  .proj-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:22px; transition:border-color .2s, transform .2s;
+  }
+  .proj-card:hover{ border-color:var(--copper-dim); transform:translateY(-2px); }
+  .proj-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
+  .proj-card h4{ font-family:var(--sans); font-weight:600; font-size:16px; margin:0; color:var(--text); }
+  .proj-tag{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase;
+    padding:4px 8px; border-radius:4px; flex-shrink:0; white-space:nowrap;
+  }
+  .proj-tag.ai{ background:rgba(127,224,160,0.12); color:var(--phosphor); }
+  .proj-tag.firmware{ background:rgba(232,163,61,0.12); color:var(--amber); }
+  .proj-tag.linux{ background:rgba(193,122,69,0.15); color:var(--copper); }
+  .proj-card p{ font-size:13.5px; color:var(--text-dim); margin:0; }
+  .proj-card[hidden]{ display:none; }
+
+  /* ---------- EXPERIENCE ---------- */
+  .exp-item{ display:grid; grid-template-columns:180px 1fr; gap:24px; }
+  @media (max-width:640px){ .exp-item{ grid-template-columns:1fr; } }
+  .exp-date{ font-family:var(--mono); font-size:12.5px; color:var(--copper); }
+  .exp-body h3{ font-family:var(--sans); font-size:18px; margin:0 0 2px; }
+  .exp-body .company{ color:var(--text-dim); font-size:13.5px; margin-bottom:16px; }
+  .exp-body h5{ font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint); margin:18px 0 8px; }
+  .exp-body ul{ margin:0; padding-left:18px; color:var(--text-dim); font-size:14.5px; }
+  .exp-body li{ margin-bottom:7px; }
+  .exp-body li b{ color:var(--text); font-weight:600; }
+
+  /* ---------- EDUCATION ---------- */
+  .edu-grid{ display:grid; gap:16px; }
+  .edu-row{
+    display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    padding:16px 0; border-bottom:1px solid var(--border-soft);
+  }
+  .edu-row:last-child{ border-bottom:none; }
+  .edu-row .what b{ color:var(--text); }
+  .edu-row .what{ color:var(--text-dim); font-size:14.5px; }
+  .edu-row .when{ font-family:var(--mono); font-size:12.5px; color:var(--text-faint); white-space:nowrap; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding:56px 0 40px; border-top:1px solid var(--border-soft); }
+  .foot-grid{ display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+  footer h3{ font-family:var(--mono); font-size:20px; margin:0 0 10px; }
+  footer .foot-links{ display:flex; flex-direction:column; gap:8px; font-family:var(--mono); font-size:13px; }
+  footer .foot-links a{ text-decoration:none; color:var(--text-dim); }
+  footer .foot-links a:hover{ color:var(--amber); }
+  .foot-note{ margin-top:36px; font-size:12px; color:var(--text-faint); font-family:var(--mono); }
+
+  /* ---------- REVEAL ---------- */
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.show{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><span class="dot"></span>aman.sharma</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">≡ MENU</button>
+    <nav class="links" id="navLinks">
+      <a href="#firmware"><span class="tag">U1</span>FIRMWARE</a>
+      <a href="#linux"><span class="tag">U2</span>LINUX</a>
+      <a href="#vision"><span class="tag">U3</span>VISION</a>
+      <a href="#projects"><span class="tag">U4</span>PROJECTS</a>
+      <a href="#experience"><span class="tag">U5</span>EXPERIENCE</a>
+      <a href="#contact"><span class="tag">U6</span>CONTACT</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none; padding-top:56px;">
+    <div class="terminal" id="terminal" aria-hidden="true"></div>
+
+    <div class="hero-head">
+      <p class="eyebrow">// embedded systems &mdash; edge intelligence</p>
+      <h1 class="name">Aman Sharma</h1>
+      <p class="role">Embedded <b>Linux</b> engineer who takes products from bare-metal firmware to real-time <b>computer vision</b> at the edge — on boards like STM32MP2, i.MX93/95, BeagleBone and Raspberry Pi.</p>
+
+      <div class="hero-actions">
+        <a class="btn primary" href="#projects">View Projects</a>
+        <a class="btn ghost" href="Aman_Sharma_Resume.pdf" download>&#8595; Download Resume</a>
+        <a class="btn ghost" href="mailto:20aman0sharma0@gmail.com">Email Me</a>
+      </div>
+
+      <div class="hero-meta">
+        <a href="https://www.linkedin.com/in/aman-sharma-7498501b9" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <span>Faridabad, Haryana, India</span>
+        <span>3 yrs Embedded · 2 yrs Linux</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / U1 FIRMWARE -->
+  <section id="firmware">
+    <div class="sec-head">
+      <span class="designator">U1</span>
+      <h2 class="sec-title">Firmware &amp; Bare-Metal</h2>
+    </div>
+    <p class="sec-sub reveal">Three years building embedded C firmware for microcontroller-based systems — from AIS-140 compliant vehicle tracking to OTA bootloaders and communication stacks over UART, SPI, I2C and CAN.</p>
+    <div class="chips reveal">
+      <span class="chip">Embedded C</span>
+      <span class="chip">STM32</span>
+      <span class="chip">USART / UART</span>
+      <span class="chip">SPI</span>
+      <span class="chip">I2C</span>
+      <span class="chip">CAN</span>
+      <span class="chip">Timers / ADC / DMA</span>
+      <span class="chip">Bootloader &amp; OTA</span>
+      <span class="chip">NAND Flash Management</span>
+      <span class="chip">BLE</span>
+      <span class="chip">TCP · MQTT · HTTP</span>
+      <span class="chip">IAR Embedded Workbench</span>
+      <span class="chip">Oscilloscope / Logic Analyzer Debug</span>
+    </div>
+  </section>
+
+  <!-- U2 LINUX -->
+  <section id="linux">
+    <div class="sec-head">
+      <span class="designator">U2</span>
+      <h2 class="sec-title">Embedded Linux</h2>
+    </div>
+    <p class="sec-sub reveal">For the past two years, focused on Linux-based embedded platforms — building and customizing Yocto BSPs, writing layers, and bringing up boards for production camera and sensor systems.</p>
+    <div class="module-grid">
+      <div class="module-card reveal">
+        <h3>BUILD SYSTEM</h3>
+        <div class="chips">
+          <span class="chip hot">Yocto Project</span>
+          <span class="chip hot">BitBake</span>
+          <span class="chip">Custom Layers</span>
+          <span class="chip">BSP Development</span>
+          <span class="chip">Board Bring-up</span>
+        </div>
+      </div>
+      <div class="module-card reveal">
+        <h3>PLATFORMS</h3>
+        <div class="chips">
+          <span class="chip hot">STM32MP2</span>
+          <span class="chip hot">i.MX93</span>
+          <span class="chip hot">i.MX95</span>
+          <span class="chip">BeagleBone</span>
+          <span class="chip">Raspberry Pi</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- U3 VISION -->
+  <section id="vision">
+    <div class="sec-head">
+      <span class="designator">U3</span>
+      <h2 class="sec-title">Edge AI &amp; Computer Vision</h2>
+    </div>
+    <p class="sec-sub reveal">Trains and deploys object-detection models directly on edge hardware, turning a camera feed into a real-time safety decision — no cloud round-trip required.</p>
+    <div class="module-grid">
+      <div class="module-card reveal">
+        <h3>MODELS TRAINED</h3>
+        <div class="chips">
+          <span class="chip hot">YOLO</span>
+          <span class="chip hot">SSD</span>
+          <span class="chip hot">MobileNet</span>
+          <span class="chip hot">EfficientNet</span>
+        </div>
+      </div>
+      <div class="module-card reveal">
+        <h3>DETECTION TARGETS</h3>
+        <div class="chips">
+          <span class="chip">Person Detection</span>
+          <span class="chip">Vehicle Detection</span>
+          <span class="chip">Phone Usage Detection</span>
+          <span class="chip">Smoking Detection</span>
+          <span class="chip">Zone / Line Intrusion</span>
+          <span class="chip">+ more</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- U4 PROJECTS -->
+  <section id="projects">
+    <div class="sec-head">
+      <span class="designator">U4</span>
+      <h2 class="sec-title">Selected Projects</h2>
+    </div>
+    <p class="sec-sub reveal">A mix of firmware systems shipped to real customers and edge-AI pipelines built for public-safety use cases.</p>
+
+    <div class="filters reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="ai">Edge AI / Vision</button>
+      <button class="filter-btn" data-filter="linux">Embedded Linux</button>
+      <button class="filter-btn" data-filter="firmware">Firmware</button>
+    </div>
+
+    <div class="proj-grid" id="projGrid">
+
+      <div class="proj-card reveal" data-cat="ai linux">
+        <div class="proj-top"><h4>Driver Monitoring System (DMS)</h4><span class="proj-tag ai">Edge AI</span></div>
+        <p>Vision-based driver-behavior monitoring — detects phone usage and smoking in real time, extracts alert images, and pushes events to a VTS over TCP/HTTP for fleet monitoring.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="ai linux">
+        <div class="proj-top"><h4>Railway Line-Crossing Gate Automation</h4><span class="proj-tag ai">Edge AI</span></div>
+        <p>Computer-vision pipeline that detects approaching trains/vehicles and automates gate control at level crossings, reducing dependency on manual gatekeepers.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="ai linux">
+        <div class="proj-top"><h4>Metro Yellow-Line Alert Detector</h4><span class="proj-tag ai">Edge AI</span></div>
+        <p>Real-time person detection on platform camera feeds that flags passengers crossing the yellow safety line, triggering an instant alert.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="ai linux">
+        <div class="proj-top"><h4>Security Surveillance Analytics</h4><span class="proj-tag ai">Edge AI</span></div>
+        <p>Person and vehicle detection running on-device for surveillance cameras, built for low-latency alerts without relying on cloud inference.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="firmware">
+        <div class="proj-top"><h4>AIS-140 Vehicle Tracking System</h4><span class="proj-tag firmware">Firmware</span></div>
+        <p>AIS-140 / AIS-038 compliant VTS firmware for clients including TML, IOCL, AEPL, Nippon and JIO — GPS logging, ignition/over-speed/panic alerts over a Quectel EC200 4G module.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="firmware">
+        <div class="proj-top"><h4>Battery Management System</h4><span class="proj-tag firmware">Firmware</span></div>
+        <p>Safety-critical logic for battery power management, built and maintained on a legacy BMS firmware codebase.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="firmware">
+        <div class="proj-top"><h4>RGBAW Wireless Lighting Control</h4><span class="proj-tag firmware">Firmware</span></div>
+        <p>Firmware and RFM-based wireless remote for Prolight RGBAW lighting sticks — encoder logic, dynamic color control, and reliable remote-to-stick communication.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="firmware">
+        <div class="proj-top"><h4>Load Dump Generator Test Rig</h4><span class="proj-tag firmware">Firmware</span></div>
+        <p>Firmware to validate PCBs against high-voltage surge conditions (100V for 10ms) for automotive load-dump compliance testing.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="firmware">
+        <div class="proj-top"><h4>Low-Speed Warning System (EV Buses)</h4><span class="proj-tag firmware">Firmware</span></div>
+        <p>Synthetic motor-sound generator for electric buses, playing engine noise at low speed to alert pedestrians per EV acoustic-alert requirements.</p>
+      </div>
+
+      <div class="proj-card reveal" data-cat="firmware">
+        <div class="proj-top"><h4>BLDC Motor Control</h4><span class="proj-tag firmware">Firmware</span></div>
+        <p>Driver-level feature additions and configuration updates for an existing BLDC motor regulator system.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- U5 EXPERIENCE -->
+  <section id="experience">
+    <div class="sec-head">
+      <span class="designator">U5</span>
+      <h2 class="sec-title">Experience</h2>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-date">OCT 2022 — PRESENT<br><span style="color:var(--text-faint)">Joined as Intern, 2022</span></div>
+      <div class="exp-body">
+        <h3>Sr. Firmware Design Engineer</h3>
+        <div class="company">Embedded Design Services India Pvt. Ltd. — Faridabad</div>
+
+        <h5>Technical Contribution</h5>
+        <ul>
+          <li>Developed and optimized firmware for microcontroller-based <b>Vehicle Tracking Systems</b>, compliant with AIS-140 and AIS-038 standards.</li>
+          <li>Designed modular libraries to improve code reusability and maintainability across products.</li>
+          <li>Implemented and optimized communication over <b>TCP/IP, HTTP and MQTT</b>.</li>
+          <li>Worked extensively on <b>NAND flash management</b> for efficient data logging.</li>
+          <li>Built firmware across <b>UART, SPI, I2C and CAN</b> interfaces.</li>
+          <li>Developed a <b>bootloader for OTA</b> firmware updates and integrated BLE for diagnostics.</li>
+          <li>Led hardware-software integration and debugging using oscilloscopes and logic analyzers.</li>
+        </ul>
+
+        <h5>Leadership &amp; Collaboration</h5>
+        <ul>
+          <li>Mentored junior engineers in embedded development and debugging techniques.</li>
+          <li>Collaborated across hardware, testing and project-management teams.</li>
+          <li>Conducted peer code reviews and enforced embedded coding standards.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- U6 EDUCATION -->
+  <section id="education">
+    <div class="sec-head">
+      <span class="designator">U6</span>
+      <h2 class="sec-title">Education</h2>
+    </div>
+    <div class="edu-grid reveal">
+      <div class="edu-row">
+        <div class="what"><b>Master's Degree</b> — Amity University, Noida <span style="color:var(--text-faint)">(Pursuing)</span></div>
+        <div class="when">2023 — 2025</div>
+      </div>
+      <div class="edu-row">
+        <div class="what"><b>B.Tech, Electronics &amp; Communication Engineering</b> — Satyug Darshan Institute of Engineering &amp; Technology</div>
+        <div class="when">2019 — 2023</div>
+      </div>
+      <div class="edu-row">
+        <div class="what"><b>Higher Secondary, Science</b> — Govt. Model Sr. Secondary School</div>
+        <div class="when">2017 — 2019</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h3>Let's talk hardware.</h3>
+        <p style="color:var(--text-dim); max-width:420px; font-size:14.5px;">Open to roles and collaborations in embedded Linux, firmware and edge AI. Reach out any time.</p>
+      </div>
+      <div class="foot-links">
+        <a href="mailto:20aman0sharma0@gmail.com">20aman0sharma0@gmail.com</a>
+        <a href="https://www.linkedin.com/in/aman-sharma-7498501b9" target="_blank" rel="noopener">linkedin.com/in/aman-sharma</a>
+        <a href="Aman_Sharma_Resume.pdf" download>Download Résumé (PDF)</a>
+        <span style="color:var(--text-faint)">Faridabad, Haryana, India</span>
+      </div>
+    </div>
+    <div class="foot-note">// Hindi (first language) · English (upper-intermediate) &nbsp;&nbsp;|&nbsp;&nbsp; built &amp; deployed like firmware — versioned, tested, shipped.</div>
+  </div>
+</footer>
+
+<script>
+  // Boot terminal typing effect
+  (function(){
+    var el = document.getElementById('terminal');
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var lines = [
+      ['[    0.000000] ', 'Booting Linux on physical CPU 0x0'],
+      ['[    0.812004] ', 'yocto-bsp: custom layers loaded [OK]'],
+      ['[    1.240091] ', 'mounting rootfs ... done'],
+      ['[    1.902233] ', 'camera0: sensor initialized (ov5647)'],
+      ['[    2.114500] ', 'loading model: yolov5s.tflite [OK]'],
+      ['[    2.400871] ', 'inference engine: ready'],
+      ['', ''],
+      ['$ ', 'whoami'],
+      ['', 'aman-sharma — embedded linux & edge ai engineer']
+    ];
+
+    function renderStatic(){
+      el.innerHTML = lines.map(function(l){
+        return '<div class="ln"><span class="ts">'+l[0]+'</span>'+l[1]+'</div>';
+      }).join('');
+    }
+
+    if(reduced){ renderStatic(); return; }
+
+    var i = 0;
+    function typeLine(){
+      if(i >= lines.length){
+        var last = el.querySelector('.ln:last-child');
+        if(last){ last.innerHTML += '<span class="cursor"></span>'; }
+        return;
+      }
+      var div = document.createElement('div');
+      div.className = 'ln';
+      var ts = document.createElement('span');
+      ts.className = 'ts';
+      ts.textContent = lines[i][0];
+      div.appendChild(ts);
+      el.appendChild(div);
+
+      var text = lines[i][1];
+      var j = 0;
+      var speed = lines[i][0] === '$ ' ? 55 : 8;
+      (function typeChar(){
+        if(j <= text.length){
+          div.textContent = lines[i][0] + text.slice(0, j);
+          j++;
+          setTimeout(typeChar, speed);
+        } else {
+          i++;
+          setTimeout(typeLine, lines[i-1][1] === '' ? 80 : 140);
+        }
+      })();
+    }
+    typeLine();
+  })();
+
+  // Mobile nav toggle
+  document.getElementById('navToggle').addEventListener('click', function(){
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('#navLinks a').forEach(function(a){
+    a.addEventListener('click', function(){ document.getElementById('navLinks').classList.remove('open'); });
+  });
+
+  // Project filters
+  var filterBtns = document.querySelectorAll('.filter-btn');
+  var cards = document.querySelectorAll('.proj-card');
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      filterBtns.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-filter');
+      cards.forEach(function(c){
+        var cats = c.getAttribute('data-cat').split(' ');
+        c.hidden = (f !== 'all' && cats.indexOf(f) === -1);
+      });
+    });
+  });
+
+  // Scroll reveal
+  var reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ entry.target.classList.add('show'); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(function(r){ io.observe(r); });
+  } else {
+    reveals.forEach(function(r){ r.classList.add('show'); });
+  }
+</script>
+</body>
+</html>
