@@ -20,6 +20,7 @@
     --copper-dim: #8a5a34;
     --amber: #e8a33d;
     --phosphor: #7fe0a0;
+    --sky: #74b9e8;
     --text: #edeae0;
     --text-dim: #9db1a4;
     --text-faint: #5f7568;
@@ -142,13 +143,49 @@
     font-family:var(--mono); font-size:12.5px; color:var(--text-dim);
     border:1px solid var(--border); padding:7px 12px; border-radius:5px;
     background:var(--panel-2);
+    transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, border-color .18s ease, color .18s ease;
+    cursor:default;
   }
-  .chip.hot{ color:var(--phosphor); border-color:rgba(127,224,160,0.35); }
+  .chip:hover{
+    transform: translateY(-3px) scale(1.06);
+    background: rgba(237,234,224,0.08);
+    border-color: var(--text-dim);
+    color:var(--text);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  }
 
   .module-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
   @media (max-width:700px){ .module-grid{ grid-template-columns:1fr; } }
-  .module-card{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:24px; }
+  .module-card{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:28px; }
   .module-card h3{ font-family:var(--mono); font-size:14px; color:var(--amber); margin:0 0 14px; letter-spacing:0.02em; }
+
+  /* ---------- SKILL GROUPS (single-card sections) ---------- */
+  .skill-groups-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px 34px; }
+  @media (max-width:700px){ .skill-groups-grid{ grid-template-columns:1fr; } }
+  .skill-group-title{
+    font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.08em;
+    margin:0 0 12px;
+    display:flex; align-items:center; gap:7px;
+  }
+  .skill-group-title::before{
+    content:''; width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0;
+  }
+
+  .skill-group.c-mint .skill-group-title{ color:var(--phosphor); }
+  .skill-group.c-mint .chip{ color:var(--phosphor); border-color:rgba(127,224,160,0.35); }
+  .skill-group.c-mint .chip:hover{ background:rgba(127,224,160,0.15); border-color:var(--phosphor); color:#eafff0; box-shadow:0 6px 16px rgba(127,224,160,0.25); }
+
+  .skill-group.c-amber .skill-group-title{ color:var(--amber); }
+  .skill-group.c-amber .chip{ color:var(--amber); border-color:rgba(232,163,61,0.35); }
+  .skill-group.c-amber .chip:hover{ background:rgba(232,163,61,0.15); border-color:var(--amber); color:#fff3df; box-shadow:0 6px 16px rgba(232,163,61,0.25); }
+
+  .skill-group.c-copper .skill-group-title{ color:var(--copper); }
+  .skill-group.c-copper .chip{ color:var(--copper); border-color:rgba(193,122,69,0.4); }
+  .skill-group.c-copper .chip:hover{ background:rgba(193,122,69,0.18); border-color:var(--copper); color:#ffe8d2; box-shadow:0 6px 16px rgba(193,122,69,0.28); }
+
+  .skill-group.c-sky .skill-group-title{ color:var(--sky); }
+  .skill-group.c-sky .chip{ color:var(--sky); border-color:rgba(116,185,232,0.35); }
+  .skill-group.c-sky .chip:hover{ background:rgba(116,185,232,0.16); border-color:var(--sky); color:#eaf6ff; box-shadow:0 6px 16px rgba(116,185,232,0.25); }
 
   /* ---------- PROJECTS ---------- */
   .filters{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
@@ -164,9 +201,13 @@
   @media (max-width:700px){ .proj-grid{ grid-template-columns:1fr; } }
   .proj-card{
     background:var(--panel); border:1px solid var(--border); border-radius:10px;
-    padding:22px; transition:border-color .2s, transform .2s;
+    padding:22px; transition:border-color .22s ease, transform .22s ease, box-shadow .22s ease;
   }
-  .proj-card:hover{ border-color:var(--copper-dim); transform:translateY(-2px); }
+  .proj-card.reveal:hover{
+    border-color:var(--copper-dim);
+    transform:translateY(-6px) scale(1.015);
+    box-shadow:0 16px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(193,122,69,0.15);
+  }
   .proj-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
   .proj-card h4{ font-family:var(--sans); font-weight:600; font-size:16px; margin:0; color:var(--text); }
   .proj-tag{
@@ -191,15 +232,17 @@
   .exp-body li b{ color:var(--text); font-weight:600; }
 
   /* ---------- EDUCATION ---------- */
-  .edu-grid{ display:grid; gap:16px; }
-  .edu-row{
-    display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
-    padding:16px 0; border-bottom:1px solid var(--border-soft);
+  .edu-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:820px){ .edu-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:600px){ .edu-grid{ grid-template-columns:1fr; } }
+  .edu-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:22px; transition:border-color .2s, transform .2s;
   }
-  .edu-row:last-child{ border-bottom:none; }
-  .edu-row .what b{ color:var(--text); }
-  .edu-row .what{ color:var(--text-dim); font-size:14.5px; }
-  .edu-row .when{ font-family:var(--mono); font-size:12.5px; color:var(--text-faint); white-space:nowrap; }
+  .edu-card:hover{ border-color:var(--copper-dim); transform:translateY(-3px); }
+  .edu-card h4{ font-family:var(--sans); font-weight:600; font-size:16px; margin:0 0 8px; color:var(--text); }
+  .edu-card .what{ color:var(--text-dim); font-size:13.5px; margin:0 0 16px; }
+  .edu-card .when{ font-family:var(--mono); font-size:12.5px; color:var(--copper); font-weight:600; letter-spacing:0.02em; }
 
   /* ---------- FOOTER ---------- */
   footer{ padding:56px 0 40px; border-top:1px solid var(--border-soft); }
@@ -226,12 +269,12 @@
     <a href="#top" class="brand"><span class="dot"></span>aman.sharma</a>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">≡ MENU</button>
     <nav class="links" id="navLinks">
-      <a href="#firmware"><span class="tag">U1</span>FIRMWARE</a>
-      <a href="#linux"><span class="tag">U2</span>LINUX</a>
-      <a href="#vision"><span class="tag">U3</span>VISION</a>
-      <a href="#projects"><span class="tag">U4</span>PROJECTS</a>
-      <a href="#experience"><span class="tag">U5</span>EXPERIENCE</a>
-      <a href="#contact"><span class="tag">U6</span>CONTACT</a>
+      <a href="#firmware">FIRMWARE</a>
+      <a href="#linux">LINUX</a>
+      <a href="#vision">VISION</a>
+      <a href="#projects">PROJECTS</a>
+      <a href="#experience">EXPERIENCE</a>
+      <a href="#contact">CONTACT</a>
     </nav>
   </div>
 </header>
@@ -264,53 +307,99 @@
   <!-- ABOUT / U1 FIRMWARE -->
   <section id="firmware">
     <div class="sec-head">
-      <span class="designator">U1</span>
       <h2 class="sec-title">Firmware &amp; Bare-Metal</h2>
     </div>
     <p class="sec-sub reveal">Three years building embedded C firmware for microcontroller-based systems — from AIS-140 compliant vehicle tracking to OTA bootloaders and communication stacks over UART, SPI, I2C and CAN.</p>
-    <div class="chips reveal">
-      <span class="chip">Embedded C</span>
-      <span class="chip">STM32</span>
-      <span class="chip">USART / UART</span>
-      <span class="chip">SPI</span>
-      <span class="chip">I2C</span>
-      <span class="chip">CAN</span>
-      <span class="chip">Timers / ADC / DMA</span>
-      <span class="chip">Bootloader &amp; OTA</span>
-      <span class="chip">NAND Flash Management</span>
-      <span class="chip">BLE</span>
-      <span class="chip">TCP · MQTT · HTTP</span>
-      <span class="chip">IAR Embedded Workbench</span>
-      <span class="chip">Oscilloscope / Logic Analyzer Debug</span>
+    <div class="module-card reveal">
+      <div class="skill-groups-grid">
+        <div class="skill-group c-mint">
+          <div class="skill-group-title">Programming &amp; MCU</div>
+          <div class="chips">
+            <span class="chip">Embedded C</span>
+            <span class="chip">C++</span>
+            <span class="chip">STM32</span>
+            <span class="chip">ARM Cortex-M</span>
+            <span class="chip">HAL / LL</span>
+            <span class="chip">Microcontrollers</span>
+          </div>
+        </div>
+        <div class="skill-group c-amber">
+          <div class="skill-group-title">Interfaces &amp; Peripherals</div>
+          <div class="chips">
+            <span class="chip">USART / UART</span>
+            <span class="chip">SPI</span>
+            <span class="chip">I2C</span>
+            <span class="chip">CAN</span>
+            <span class="chip">RS232</span>
+            <span class="chip">Timers / ADC / DMA</span>
+            <span class="chip">BLE</span>
+          </div>
+        </div>
+        <div class="skill-group c-copper">
+          <div class="skill-group-title">Memory &amp; Firmware</div>
+          <div class="chips">
+            <span class="chip">NAND / NOR Flash Management</span>
+            <span class="chip">Bootloader &amp; OTA</span>
+            <span class="chip">TCP · MQTT · HTTP</span>
+          </div>
+        </div>
+        <div class="skill-group c-sky">
+          <div class="skill-group-title">Debugging &amp; Tools</div>
+          <div class="chips">
+            <span class="chip">IAR Embedded Workbench</span>
+            <span class="chip">Oscilloscope / Logic Analyzer</span>
+            <span class="chip">Register-level Debugging</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- U2 LINUX -->
   <section id="linux">
     <div class="sec-head">
-      <span class="designator">U2</span>
       <h2 class="sec-title">Embedded Linux</h2>
     </div>
-    <p class="sec-sub reveal">For the past two years, focused on Linux-based embedded platforms — building and customizing Yocto BSPs, writing layers, and bringing up boards for production camera and sensor systems.</p>
-    <div class="module-grid">
-      <div class="module-card reveal">
-        <h3>BUILD SYSTEM</h3>
-        <div class="chips">
-          <span class="chip hot">Yocto Project</span>
-          <span class="chip hot">BitBake</span>
-          <span class="chip">Custom Layers</span>
-          <span class="chip">BSP Development</span>
-          <span class="chip">Board Bring-up</span>
+    <p class="sec-sub reveal">For the past two years, focused on Linux-based embedded platforms — building and customizing Yocto BSPs, working with the kernel and device tree, wiring up camera pipelines, and bringing up boards for production camera and sensor systems.</p>
+    <div class="module-card reveal">
+      <div class="skill-groups-grid">
+        <div class="skill-group c-mint">
+          <div class="skill-group-title">Build System</div>
+          <div class="chips">
+            <span class="chip">Yocto Project</span>
+            <span class="chip">BitBake</span>
+            <span class="chip">Custom Layers</span>
+            <span class="chip">BSP Development</span>
+            <span class="chip">Board Bring-up</span>
+          </div>
         </div>
-      </div>
-      <div class="module-card reveal">
-        <h3>PLATFORMS</h3>
-        <div class="chips">
-          <span class="chip hot">STM32MP2</span>
-          <span class="chip hot">i.MX93</span>
-          <span class="chip hot">i.MX95</span>
-          <span class="chip">BeagleBone</span>
-          <span class="chip">Raspberry Pi</span>
+        <div class="skill-group c-amber">
+          <div class="skill-group-title">Platforms</div>
+          <div class="chips">
+            <span class="chip">STM32MP2</span>
+            <span class="chip">i.MX93</span>
+            <span class="chip">i.MX95</span>
+            <span class="chip">BeagleBone</span>
+            <span class="chip">Raspberry Pi</span>
+          </div>
+        </div>
+        <div class="skill-group c-copper">
+          <div class="skill-group-title">Kernel &amp; Hardware Integration</div>
+          <div class="chips">
+            <span class="chip">Linux Kernel</span>
+            <span class="chip">Kernel Config</span>
+            <span class="chip">Device Tree</span>
+            <span class="chip">DTS / DTSI</span>
+          </div>
+        </div>
+        <div class="skill-group c-sky">
+          <div class="skill-group-title">Multimedia</div>
+          <div class="chips">
+            <span class="chip">GStreamer</span>
+            <span class="chip">MIPI CSI</span>
+            <span class="chip">Camera Pipelines</span>
+            <span class="chip">V4L2</span>
+          </div>
         </div>
       </div>
     </div>
@@ -319,29 +408,56 @@
   <!-- U3 VISION -->
   <section id="vision">
     <div class="sec-head">
-      <span class="designator">U3</span>
       <h2 class="sec-title">Edge AI &amp; Computer Vision</h2>
     </div>
     <p class="sec-sub reveal">Trains and deploys object-detection models directly on edge hardware, turning a camera feed into a real-time safety decision — no cloud round-trip required.</p>
-    <div class="module-grid">
-      <div class="module-card reveal">
-        <h3>MODELS TRAINED</h3>
-        <div class="chips">
-          <span class="chip hot">YOLO</span>
-          <span class="chip hot">SSD</span>
-          <span class="chip hot">MobileNet</span>
-          <span class="chip hot">EfficientNet</span>
+    <div class="module-card reveal">
+      <div class="skill-groups-grid">
+        <div class="skill-group c-mint">
+          <div class="skill-group-title">Vision &amp; ML</div>
+          <div class="chips">
+            <span class="chip">Python</span>
+            <span class="chip">OpenCV</span>
+            <span class="chip">YOLO</span>
+            <span class="chip">SSD</span>
+            <span class="chip">MobileNet</span>
+            <span class="chip">EfficientNet</span>
+            <span class="chip">Object Detection</span>
+            <span class="chip">Image Processing</span>
+          </div>
         </div>
-      </div>
-      <div class="module-card reveal">
-        <h3>DETECTION TARGETS</h3>
-        <div class="chips">
-          <span class="chip">Person Detection</span>
-          <span class="chip">Vehicle Detection</span>
-          <span class="chip">Phone Usage Detection</span>
-          <span class="chip">Smoking Detection</span>
-          <span class="chip">Zone / Line Intrusion</span>
-          <span class="chip">+ more</span>
+        <div class="skill-group c-amber">
+          <div class="skill-group-title">Detection Targets</div>
+          <div class="chips">
+            <span class="chip">Person Detection</span>
+            <span class="chip">Vehicle Detection</span>
+            <span class="chip">Phone Usage Detection</span>
+            <span class="chip">Smoking Detection</span>
+            <span class="chip">Zone / Line Intrusion</span>
+            <span class="chip">Object Counting</span>
+            <span class="chip">+ more</span>
+          </div>
+        </div>
+        <div class="skill-group c-copper">
+          <div class="skill-group-title">Model Deployment</div>
+          <div class="chips">
+            <span class="chip">TensorFlow Lite</span>
+            <span class="chip">TFLite Runtime</span>
+            <span class="chip">ONNX</span>
+            <span class="chip">INT8 Quantization</span>
+            <span class="chip">PTQ</span>
+            <span class="chip">Model Conversion</span>
+          </div>
+        </div>
+        <div class="skill-group c-sky">
+          <div class="skill-group-title">Hardware Acceleration</div>
+          <div class="chips">
+            <span class="chip">NPU Acceleration</span>
+            <span class="chip">Ethos-U</span>
+            <span class="chip">Vela</span>
+            <span class="chip">ST AI</span>
+            <span class="chip">Hardware Inference</span>
+          </div>
         </div>
       </div>
     </div>
@@ -350,7 +466,6 @@
   <!-- U4 PROJECTS -->
   <section id="projects">
     <div class="sec-head">
-      <span class="designator">U4</span>
       <h2 class="sec-title">Selected Projects</h2>
     </div>
     <p class="sec-sub reveal">A mix of firmware systems shipped to real customers and edge-AI pipelines built for public-safety use cases.</p>
@@ -420,7 +535,6 @@
   <!-- U5 EXPERIENCE -->
   <section id="experience">
     <div class="sec-head">
-      <span class="designator">U5</span>
       <h2 class="sec-title">Experience</h2>
     </div>
     <div class="exp-item reveal">
@@ -434,7 +548,7 @@
           <li>Developed and optimized firmware for microcontroller-based <b>Vehicle Tracking Systems</b>, compliant with AIS-140 and AIS-038 standards.</li>
           <li>Designed modular libraries to improve code reusability and maintainability across products.</li>
           <li>Implemented and optimized communication over <b>TCP/IP, HTTP and MQTT</b>.</li>
-          <li>Worked extensively on <b>NAND flash management</b> for efficient data logging.</li>
+          <li>Worked extensively on <b>NAND/NOR flash management</b> for efficient data logging.</li>
           <li>Built firmware across <b>UART, SPI, I2C and CAN</b> interfaces.</li>
           <li>Developed a <b>bootloader for OTA</b> firmware updates and integrated BLE for diagnostics.</li>
           <li>Led hardware-software integration and debugging using oscilloscopes and logic analyzers.</li>
@@ -453,20 +567,22 @@
   <!-- U6 EDUCATION -->
   <section id="education">
     <div class="sec-head">
-      <span class="designator">U6</span>
       <h2 class="sec-title">Education</h2>
     </div>
     <div class="edu-grid reveal">
-      <div class="edu-row">
-        <div class="what"><b>Master's Degree</b> — Amity University, Noida <span style="color:var(--text-faint)"></span></div>
+      <div class="edu-card">
+        <h4>MBA, Information Technology</h4>
+        <div class="what">Amity University, Noida</div>
         <div class="when">2023 — 2025</div>
       </div>
-      <div class="edu-row">
-        <div class="what"><b>B.Tech, Electronics &amp; Communication Engineering</b> — Satyug Darshan Institute of Engineering &amp; Technology</div>
+      <div class="edu-card">
+        <h4>B.Tech, ECE</h4>
+        <div class="what">Satyug Darshan Institute of Engineering &amp; Technology</div>
         <div class="when">2019 — 2023</div>
       </div>
-      <div class="edu-row">
-        <div class="what"><b>Higher Secondary, Science</b> — Govt. Model Sr. Secondary School</div>
+      <div class="edu-card">
+        <h4>Higher Secondary, Science</h4>
+        <div class="what">Govt. Model Sr. Secondary School</div>
         <div class="when">2017 — 2019</div>
       </div>
     </div>
